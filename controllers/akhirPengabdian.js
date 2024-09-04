@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 
 
-//pengabdian Controllers
+
 const getAkhirPengabdian = async (req, res) => {
   try {
     // Hitung jumlah total catatan di tabel akhirpengabdian
@@ -11,17 +11,24 @@ const getAkhirPengabdian = async (req, res) => {
 
     // Tentukan titik tengah dan hitung offset
     const middleIndex = Math.floor(totalCount / 2);
-    const skipCount = middleIndex - 5; // Karena kita ingin 10 data di tengah, kita skip 5 data sebelum titik tengah
+    const skipCount = middleIndex - 5; 
 
     // Ambil 10 data dari tengah
     const records = await prisma.akhirpengabdian.findMany({
-      skip: Math.max(skipCount, 0),  // Pastikan offset tidak negatif
+      skip: Math.max(skipCount, 0), 
       take: 10,
     });
 
-    res.json(records);
+    // Format JSON dengan indentasi
+    const formattedRecords = JSON.stringify(records, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.send(formattedRecords);
   } catch (error) {
-    res.status(500).json({ msg: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -33,7 +40,14 @@ const getAkhirPengabdianById = async (req, res) => {
       where: { kode: id },
     });
     if (record) {
-      res.json(record);
+      // Format JSON dengan indentasi
+      const formattedRecord = JSON.stringify(record, null, 2);
+
+      // Set header Content-Type untuk JSON
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Kirimkan JSON yang terformat
+      res.send(formattedRecord);
     } else {
       res.status(404).json({ error: "Record not found" });
     }

@@ -21,7 +21,14 @@ const getPengabdian= async (req, res) => {
       take: 10,
     });
 
-    res.json(records);
+    // Format JSON dengan indentasi
+    const formattedRecords = JSON.stringify(records, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.send(formattedRecords);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -31,18 +38,26 @@ const getPengabdian= async (req, res) => {
 
   const getPengabdianById = async (req, res) => {
     const { id } = req.params;
-    try {
-      const record = await prisma.pengabdian.findUnique({
-        where: { id: id },
-      });
-      if (record) {
-        res.json(record);
-      } else {
-        res.status(404).json({ error: "Record not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+  try {
+    const record = await prisma.pengabdian.findUnique({
+      where: { id: id },
+    });
+
+    if (record) {
+      // Format JSON dengan indentasi
+      const formattedRecord = JSON.stringify(record, null, 2);
+
+      // Set header Content-Type untuk JSON
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Kirimkan JSON yang terformat
+      res.send(formattedRecord);
+    } else {
+      res.status(404).json({ error: "Record not found" });
     }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
   };
 
   const createPengabdian = async (req, res) => {

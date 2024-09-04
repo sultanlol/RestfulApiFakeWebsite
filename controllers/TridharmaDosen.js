@@ -1,31 +1,49 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// User Controllers
+
 
 const gettridharmaDosen = async (req, res) => {
-    try {
-        const tridharmdosen = await prisma.tridharmdosen.findMany();
-        res.json(tridharmdosen);
-      } catch (error) {
-        res.status(500).json({ error: 'An error occurred while fetching data.' });
-      }
+  try {
+    // Ambil semua data dari tabel tridharmdosen
+    const tridharmdosen = await prisma.tridharmdosen.findMany();
+
+    // Format JSON dengan indentasi
+    const formattedTridharmdosen = JSON.stringify(tridharmdosen, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.send(formattedTridharmdosen);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching data.' });
+  }
 };
 
 const gettridharmaDosenById = async (req, res) => {
-    const { id } = req.params;
-    try {
-      const tridharmdosen = await prisma.tridharmdosen.findUnique({
-        where: { id },
-      });
-      if (tridharmdosen) {
-        res.json(tridharmdosen);
-      } else {
-        res.status(404).json({ error: 'Tridharmdosen not found.' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while fetching data.' });
+  const { id } = req.params;
+  try {
+    // Ambil data tridharmdosen berdasarkan id
+    const tridharmdosen = await prisma.tridharmdosen.findUnique({
+      where: { id },
+    });
+
+    if (tridharmdosen) {
+      // Format JSON dengan indentasi
+      const formattedTridharmdosen = JSON.stringify(tridharmdosen, null, 2);
+
+      // Set header Content-Type untuk JSON
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Kirimkan JSON yang terformat
+      res.send(formattedTridharmdosen);
+    } else {
+      res.status(404).json({ error: 'Tridharmdosen not found.' });
     }
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching data.' });
+  }
 };
 
 const createtridharmaDosen = async (req, res) => {

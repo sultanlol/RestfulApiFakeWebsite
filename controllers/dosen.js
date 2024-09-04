@@ -1,17 +1,20 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// User Controllers
 
 const getDosens = async (req, res) => {
   try {
-    const dosens = await prisma.dosen.findMany(
-    //   {
-    //   take: 10  // Menampilkan hanya 10 data
+    // Mengambil data dosens dari database
+    const dosens = await prisma.dosen.findMany();
     
-    // }
-  );
-    res.json(dosens);
+    // Format JSON dengan indentasi
+    const formattedDosens = JSON.stringify(dosens, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.send(formattedDosens);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -20,11 +23,20 @@ const getDosens = async (req, res) => {
 const getDosenById = async (req, res) => {
   const { id } = req.params;
   try {
-    const dosens = await prisma.dosen.findUnique({
+    // Mengambil data dosen berdasarkan ID dari database
+    const dosen = await prisma.dosen.findUnique({
       where: { nip: id },
     });
-    if (dosens) {
-      res.json(dosens);
+    
+    if (dosen) {
+      // Format JSON dengan indentasi
+      const formattedDosen = JSON.stringify(dosen, null, 2);
+
+      // Set header Content-Type untuk JSON
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Kirimkan JSON yang terformat
+      res.send(formattedDosen);
     } else {
       res.status(404).json({ error: "Dosen not found" });
     }

@@ -1,31 +1,49 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// User Controllers
+
 
 const gettridharma = async (req, res) => {
-    try {
-        const tridharma = await prisma.tridharma.findMany();
-        res.json(tridharma);
-    } catch (error) {
-        res.status(500).json({ error: 'An error occurred while fetching data.' });
-    }
+  try {
+    // Ambil semua data dari tabel tridharma
+    const tridharma = await prisma.tridharma.findMany();
+
+    // Format JSON dengan indentasi
+    const formattedTridharma = JSON.stringify(tridharma, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.send(formattedTridharma);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching data.' });
+  }
 };
 
 const gettridharmaById = async (req, res) => {
-    const { kode } = req.params;
-    try {
-      const tridharma = await prisma.tridharma.findUnique({
-        where: { kode },
-      });
-      if (tridharma) {
-        res.json(tridharma);
-      } else {
-        res.status(404).json({ error: 'Tridharma not found.' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while fetching data.' });
+ const { kode } = req.params;
+  try {
+    // Ambil data tridharma berdasarkan kode
+    const tridharma = await prisma.tridharma.findUnique({
+      where: { kode },
+    });
+
+    if (tridharma) {
+      // Format JSON dengan indentasi
+      const formattedTridharma = JSON.stringify(tridharma, null, 2);
+
+      // Set header Content-Type untuk JSON
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Kirimkan JSON yang terformat
+      res.send(formattedTridharma);
+    } else {
+      res.status(404).json({ error: 'Tridharma not found.' });
     }
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching data.' });
+  }
 };
 
 const createtridharma = async (req, res) => {

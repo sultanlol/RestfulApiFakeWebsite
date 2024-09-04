@@ -8,7 +8,15 @@ const prisma = new PrismaClient();
 const getAkhirPenelitians = async (req, res) => {
   try {
     const records = await prisma.akhirpenelitian.findMany();
-    res.json(records);
+
+    // Format JSON dengan indentasi
+    const formattedRecords = JSON.stringify(records, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.send(formattedRecords);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -22,7 +30,14 @@ const getAkhirPenelitianById = async (req, res) => {
       where: { kode: id },
     });
     if (record) {
-      res.json(record);
+      // Format JSON dengan indentasi
+      const formattedRecord = JSON.stringify(record, null, 2);
+
+      // Set header Content-Type untuk JSON
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Kirimkan JSON yang terformat
+      res.send(formattedRecord);
     } else {
       res.status(404).json({ error: "Record not found" });
     }
@@ -56,7 +71,15 @@ const createAkhirPenelitian = async (req, res) => {
         gambarbukti6
       }
     });
-    res.status(201).json(newAkhirPenelitian);
+
+    // Format JSON dengan indentasi
+    const formattedNewAkhirPenelitian = JSON.stringify(newAkhirPenelitian, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.status(201).send(formattedNewAkhirPenelitian);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

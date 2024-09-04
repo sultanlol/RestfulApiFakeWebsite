@@ -1,12 +1,20 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// User Controllers
 
 const getmataKuliahTE = async (req, res) => {
   try {
+    // Mengambil data mata kuliah dari database
     const matakuliah = await prisma.mata_kuliahte.findMany();
-    res.json(matakuliah);
+
+    // Format JSON dengan indentasi
+    const formattedMatakuliah = JSON.stringify(matakuliah, null, 2);
+
+    // Set header Content-Type untuk JSON
+    res.setHeader('Content-Type', 'application/json');
+    
+    // Kirimkan JSON yang terformat
+    res.send(formattedMatakuliah);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -15,12 +23,25 @@ const getmataKuliahTE = async (req, res) => {
 const getmataKuliahTEById = async (req, res) => {
   const { id } = req.params;
   try {
+    // Mengambil data mata kuliah berdasarkan ID dari database
     const matakuliah = await prisma.mata_kuliahte.findUnique({
       where: {
         id: parseInt(id), // Menggunakan id yang dikonversi ke integer
       },
     });
-    res.json(matakuliah);
+
+    if (matakuliah) {
+      // Format JSON dengan indentasi
+      const formattedMatakuliah = JSON.stringify(matakuliah, null, 2);
+
+      // Set header Content-Type untuk JSON
+      res.setHeader('Content-Type', 'application/json');
+      
+      // Kirimkan JSON yang terformat
+      res.send(formattedMatakuliah);
+    } else {
+      res.status(404).json({ error: "Mata Kuliah TE not found" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
