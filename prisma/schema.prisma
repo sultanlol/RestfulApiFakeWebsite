@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model akhirpenelitian {
+  kode         String      @id @db.VarChar(100)
+  id           String?     @db.VarChar(100)
+  image        String?     @db.VarChar(255)
+  jumlahbukti  Int?
+  namabukti1   String?     @db.VarChar(100)
+  namabukti2   String?     @db.VarChar(100)
+  namabukti3   String?     @db.VarChar(100)
+  namabukti4   String?     @db.VarChar(100)
+  namabukti5   String?     @db.VarChar(100)
+  namabukti6   String?     @db.VarChar(100)
+  gambarbukti1 String?     @db.VarChar(100)
+  gambarbukti2 String?     @db.VarChar(100)
+  gambarbukti3 String?     @db.VarChar(100)
+  gambarbukti4 String?     @db.VarChar(100)
+  gambarbukti5 String?     @db.VarChar(100)
+  gambarbukti6 String?     @db.VarChar(100)
+  penelitian   penelitian? @relation(fields: [id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "akhirpenelitian_ibfk_1")
+
+  @@index([id], map: "id")
+}
+
+model akhirpengabdian {
+  kode         String      @id @db.VarChar(100)
+  id           String?     @db.VarChar(100)
+  image        String?     @db.VarChar(255)
+  jumlahbukti  Int?
+  namabukti1   String?     @db.VarChar(100)
+  namabukti2   String?     @db.VarChar(100)
+  namabukti3   String?     @db.VarChar(100)
+  namabukti4   String?     @db.VarChar(100)
+  namabukti5   String?     @db.VarChar(100)
+  namabukti6   String?     @db.VarChar(100)
+  namabukti7   String?     @db.VarChar(100)
+  namabukti8   String?     @db.VarChar(100)
+  namabukti9   String?     @db.VarChar(100)
+  gambarbukti1 String?     @db.VarChar(100)
+  gambarbukti2 String?     @db.VarChar(100)
+  gambarbukti3 String?     @db.VarChar(100)
+  gambarbukti4 String?     @db.VarChar(100)
+  gambarbukti5 String?     @db.VarChar(100)
+  gambarbukti6 String?     @db.VarChar(100)
+  gambarbukti7 String?     @db.VarChar(100)
+  gambarbukti8 String?     @db.VarChar(100)
+  gambarbukti9 String?     @db.VarChar(100)
+  pengabdian   pengabdian? @relation(fields: [id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "akhirpengabdian_ibfk_1")
+
+  @@index([id], map: "id")
+}
+
+model dosen {
+  nip           String          @id @db.VarChar(50)
+  username      String?         @db.VarChar(100)
+  jurusan       String?         @db.VarChar(50)
+  kelamin       String?         @db.VarChar(50)
+  prodi         String?         @db.VarChar(100)
+  mata_kuliahte mata_kuliahte[]
+  penelitian    penelitian[]
+  pengabdian    pengabdian[]
+  tridharmdosen tridharmdosen[]
+}
+
+model dosente {
+  nip     String  @id @db.VarChar(50)
+  nama    String? @db.VarChar(100)
+  jurusan String? @db.VarChar(50)
+  kelamin String? @db.VarChar(50)
+  prodi   String? @db.VarChar(100)
+}
+
+model mata_kuliahte {
+  id             Int     @id @default(autoincrement())
+  nama_mk        String  @db.VarChar(100)
+  sks            Int
+  semester       Int
+  dosen_pengampu String? @db.VarChar(100)
+  nip_dosen      String? @db.VarChar(50)
+  prodi          String  @db.VarChar(100)
+  dosen          dosen?  @relation(fields: [nip_dosen], references: [nip], onDelete: Restrict, onUpdate: Restrict, map: "mata_kuliahte_ibfk_1")
+
+  @@index([nip_dosen], map: "nip_dosen")
+}
+
+model penelitian {
+  id              String            @id @db.VarChar(100)
+  judul           String?           @db.VarChar(200)
+  skema           String?           @db.VarChar(100)
+  abstrak         String?           @db.Text
+  nipKetua        String?           @db.VarChar(50)
+  image           String            @default("default.jpg") @db.VarChar(255)
+  tkt             String?           @db.VarChar(30)
+  jumlahMember    Int?
+  durasi          String?           @db.VarChar(10)
+  jumlahLW        Int?
+  jumlahLT        Int?
+  periode         String?           @db.VarChar(10)
+  nipMember1      String?           @db.VarChar(50)
+  nipMember2      String?           @db.VarChar(50)
+  nipMember3      String?           @db.VarChar(50)
+  lw1             String?           @db.Text
+  lw2             String?           @db.Text
+  lt1             String?           @db.VarChar(20)
+  lt2             String?           @db.VarChar(20)
+  lws1            String?           @db.Text
+  lws2            String?           @db.Text
+  lts1            String?           @db.VarChar(20)
+  anggaran        Int?
+  jurusan         String?           @db.VarChar(50)
+  tanggalSubmit   DateTime?         @db.Date
+  namaKetua       String?           @db.VarChar(100)
+  status          String?           @db.VarChar(50)
+  revisi          String?           @default("no") @db.VarChar(50)
+  verifikasi      String?           @db.VarChar(100)
+  kinerja         String?           @db.VarChar(50)
+  komkapus        String?           @db.Text
+  plagiat         String?           @default("no") @db.VarChar(20)
+  akhirpenelitian akhirpenelitian[]
+  dosen           dosen?            @relation(fields: [nipKetua], references: [nip], onDelete: Restrict, onUpdate: Restrict, map: "penelitian_ibfk_1")
+
+  @@index([nipKetua], map: "nipKetua")
+}
+
+model pengabdian {
+  id              String            @id @db.VarChar(100)
+  judul           String?           @db.VarChar(200)
+  skema           String?           @db.VarChar(100)
+  abstrak         String?           @db.Text
+  nipKetua        String?           @db.VarChar(50)
+  image           String?           @db.VarChar(255)
+  jumlahMember    Int?
+  durasi          String?           @db.VarChar(10)
+  periode         String?           @db.VarChar(10)
+  jumlahLW        Int?
+  jumlahLT        Int?
+  nipMember1      String?           @db.VarChar(50)
+  nipMember2      String?           @db.VarChar(50)
+  nipMember3      String?           @db.VarChar(50)
+  nipMember4      String?           @db.VarChar(50)
+  lw1             String?           @db.Text
+  lw2             String?           @db.Text
+  lws1            String?           @db.Text
+  lws2            String?           @db.Text
+  lws3            String?           @db.Text
+  lt1             String?           @db.VarChar(20)
+  lts1            String?           @db.VarChar(20)
+  anggaran        Int?
+  jurusan         String?           @db.VarChar(50)
+  status          String?           @db.VarChar(50)
+  jumlahmitra     Int?
+  namamitra1      String?           @db.Text
+  namamitra2      String?           @db.Text
+  alamatmitra2    String?           @db.Text
+  alamatmitra1    String?           @db.Text
+  revisi          String?           @default("no") @db.VarChar(50)
+  tanggalSubmit   DateTime?         @db.Date
+  verifikasi      String?           @db.VarChar(100)
+  kinerja         String?           @db.VarChar(50)
+  komkapus        String?           @db.Text
+  akhirpengabdian akhirpengabdian[]
+  dosen           dosen?            @relation(fields: [nipKetua], references: [nip], onDelete: Restrict, onUpdate: Restrict, map: "pengabdian_ibfk_1")
+
+  @@index([nipKetua], map: "nipKetua")
+}
+
+model tridharma {
+  kode          String          @id @db.VarChar(20)
+  nama          String?         @db.VarChar(100)
+  tridharmdosen tridharmdosen[]
+}
+
+model tridharmdosen {
+  id           String     @id @db.VarChar(100)
+  nip          String?    @db.VarChar(50)
+  kode         String?    @db.VarChar(20)
+  kegiatan     String?    @db.Text
+  semester     String?    @db.VarChar(20)
+  tahunakad    String?    @db.VarChar(20)
+  masatugas    String?    @db.VarChar(100)
+  rekomendasi  String?    @db.VarChar(100)
+  sksbkd       Float?
+  skslkd       Float?
+  jumlahbukti  Int?
+  namabukti1   String?    @db.VarChar(100)
+  namabukti2   String?    @db.VarChar(100)
+  namabukti3   String?    @db.VarChar(100)
+  namabukti4   String?    @db.VarChar(100)
+  namabukti5   String?    @db.VarChar(100)
+  gambarbukti1 String?    @db.VarChar(100)
+  gambarbukti2 String?    @db.VarChar(100)
+  gambarbukti3 String?    @db.VarChar(100)
+  gambarbukti4 String?    @db.VarChar(100)
+  gambarbukti5 String?    @db.VarChar(100)
+  dosen        dosen?     @relation(fields: [nip], references: [nip], onDelete: Restrict, onUpdate: Restrict, map: "tridharmdosen_ibfk_1")
+  tridharma    tridharma? @relation(fields: [kode], references: [kode], onDelete: Restrict, onUpdate: Restrict, map: "tridharmdosen_ibfk_2")
+
+  @@index([kode], map: "kode")
+  @@index([nip], map: "nip")
+}
